@@ -8,6 +8,8 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from '@react-navigation/stack'
 
+import { load } from "../../stores/Storage";
+
 import icon_main_logo from '../../assets/icon_main_logo.png'
 
 export default () => {
@@ -16,7 +18,7 @@ export default () => {
 
     useEffect(() => {
         setTimeout(() => {
-            startLogin();
+            getUserInfo();
         },3000)
     },[])
 
@@ -24,6 +26,18 @@ export default () => {
         navigation.replace('Login') // 跳到登录页
     }
 
+    const startHome = () => {
+        navigation.replace('MainTab')
+    }
+
+    const getUserInfo = async () => {
+        const cacheUserInfo = await load('userInfo')
+        if(cacheUserInfo && JSON.parse(cacheUserInfo)){
+            startHome()
+        }else{
+            startLogin()
+        }
+    }
 
     return (
         <View style={ styles.root }>

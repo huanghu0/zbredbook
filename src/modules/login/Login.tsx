@@ -7,8 +7,14 @@ import {
     Text,
     Linking,
     TextInput,
-    LayoutAnimation
+    LayoutAnimation,
+    ToastAndroid
 } from "react-native"
+
+import { useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from '@react-navigation/stack'
+import { formatPhone,replaceBlank } from '../../utils/StringUtil'
+import UserStore from "../../stores/UserStore";
 
 import icon_main_logo from '../../assets/icon_main_logo.png'
 import icon_unselected from '../../assets/icon_unselected.png'
@@ -25,9 +31,12 @@ import icon_close from '../../assets/icon_close_modal.png'
 
 export default () => {
 
+    const navigation = useNavigation<StackNavigationProp<any>>();
     const [loginType,setLoginType] = useState<'quick' | 'input'>('quick');
     const [check,setCheck] = useState<boolean>(false)
     const [eyeOpen,setEyeOpen] = useState<boolean>(true)
+    const [phone,setPhone] = useState<string>('')
+    const [pwd,setPwd] = useState<string>('')
 
 
     const renderQuickLogin = () => {
@@ -150,6 +159,22 @@ export default () => {
         )
     }
 
+    const canLogin = phone?.length === 13 && pwd?.length === 6; 
+
+    const onLoginPress = async () => {
+        const canLogin = phone?.length === 13 && pwd?.length === 6; 
+        if(!canLogin || !check){
+            return
+        }
+        UserStore.requestLogin(replaceBlank(phone),pwd,(success:boolean) => {
+            if(success){
+                navigation.replace('MainTab')
+            }else{
+                ToastAndroid.show('登陆失败，请重新登陆',ToastAndroid.LONG)
+            }
+        })
+    }
+
     const renderInputLogin = () => {
         const styles = StyleSheet.create({
             root:{
@@ -244,6 +269,15 @@ export default () => {
                 borderRadius:28,
                 marginTop:20
             },
+            loginButtonDisable:{
+                width:'100%',
+                height:56,
+                backgroundColor:'#dddddd',
+                justifyContent:'center',
+                alignItems:'center',
+                borderRadius:28,
+                marginTop:20                
+            },
             loginTxt:{
                 fontSize:20,
                 color:'white'
@@ -282,7 +316,18 @@ export default () => {
                 <View style={styles.phoneLayout}>
                     <Text style={styles.pre86}>+86</Text>
                     <Image style={styles.triangle} source={icon_triangle}></Image>
-                    <TextInput style={styles.phoneInput} placeholderTextColor="#bbb" placeholder="请输入手机号码" autoFocus={false} />
+                    <TextInput 
+                        style={styles.phoneInput} 
+                        placeholderTextColor="#bbb" 
+                        placeholder="请输入手机号码" 
+                        autoFocus={false}
+                        keyboardType="number-pad"
+                        maxLength={13}  
+                        value={phone}
+                        onChangeText={(text:string) => {
+                            setPhone(formatPhone(text))
+                        }}                      
+                    />
                 </View>
                 <View style={styles.pwdLayout}>
                     <TextInput 
@@ -290,6 +335,13 @@ export default () => {
                         placeholderTextColor="#bbb"
                         placeholder="输入密码"
                         autoFocus={false}
+                        keyboardType="number-pad"
+                        maxLength={6}
+                        value={pwd}
+                        secureTextEntry={!eyeOpen}
+                        onChangeText={(text:string) => {
+                            setPwd(text)
+                        }}
                     ></TextInput>
                     <TouchableOpacity
                         onPress={() => {
@@ -305,8 +357,9 @@ export default () => {
                     <Text style={styles.forgetPwdTxt}>忘记密码?</Text>
                 </View> 
                 <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.loginButton}
+                    activeOpacity={canLogin ? 0.7 : 1}
+                    style={canLogin ? styles.loginButton : styles.loginButtonDisable}
+                    onPress={onLoginPress}
                 >
                     <Text style={styles.loginTxt}>登陆</Text>
                 </TouchableOpacity>  

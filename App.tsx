@@ -15,6 +15,7 @@ import { createStackNavigator,TransitionPresets } from '@react-navigation/stack'
 
 import Welcome from './src/modules/welcome/Welcome';
 import Login from './src/modules/login/Login';
+import MainTab from './src/modules/mainTab/mainTab';
 
 const Stack = createStackNavigator()
 
@@ -38,7 +39,6 @@ function App(): JSX.Element {
             name='Welcome'
             component={Welcome}
             options={{
-              // TODO
               headerShown:false,
               ...TransitionPresets.SlideFromRightIOS
             }}
@@ -47,11 +47,18 @@ function App(): JSX.Element {
             name='Login'
             component={Login}
             options={{
-              // TODO
               headerShown:false,
               ...TransitionPresets.SlideFromRightIOS
             }}
           />
+          <Stack.Screen
+            name='MainTab'
+            component={MainTab}
+            options={{
+              headerShown:false,
+              ...TransitionPresets.SlideFromRightIOS
+            }}
+          />          
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
