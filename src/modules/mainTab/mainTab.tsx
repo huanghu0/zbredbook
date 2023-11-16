@@ -7,8 +7,8 @@ import {
     StyleSheet,
 } from 'react-native'
 
-import { createBottomTabNavigator,ImageLibraryOptions } from '@react-navigation/bottom-tabs'
-import { launchImageLibrary } from "react-native-image-picker"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { launchImageLibrary,ImageLibraryOptions } from "react-native-image-picker"
 import Home from "../home/Home";
 import Shop from "../shop/Shop";
 import Message from "../message/Message";
@@ -136,35 +136,40 @@ export default () => {
                     name="Home"
                     component={Home}
                     options={{
-                        title:'首页'
+                        title:'首页',
+                        headerShown:false
                     }}
                 />
                 <BottomTab.Screen
                     name="Shop"
                     component={Shop}
                     options={{
-                        title:'购物'
+                        title:'购物',
+                        headerShown:false
                     }}
                 />
                 <BottomTab.Screen
                     name="Publish"
                     component={Shop}
                     options={{
-                        title:'发布'
+                        title:'发布',
+                        headerShown:false
                     }}
                 />                
                 <BottomTab.Screen
                     name="Message"
                     component={Message}
                     options={{
-                        title:'消息'
+                        title:'消息',
+                        headerShown:false
                     }}
                 />
                 <BottomTab.Screen
                     name="Mine"
                     component={Mine}
                     options={{
-                        title:'我的'
+                        title:'我的',
+                        headerShown:false
                     }}
                 />
 

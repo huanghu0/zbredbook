@@ -10,6 +10,8 @@ import { StackNavigationProp } from '@react-navigation/stack'
 
 import { load } from "../../stores/Storage";
 
+import UserStore from "../../stores/UserStore";
+
 import icon_main_logo from '../../assets/icon_main_logo.png'
 
 export default () => {
@@ -31,11 +33,17 @@ export default () => {
     }
 
     const getUserInfo = async () => {
-        const cacheUserInfo = await load('userInfo')
-        if(cacheUserInfo && JSON.parse(cacheUserInfo)){
-            startHome()
-        }else{
-            startLogin()
+        const cacheUserInfo = await load('userInfo');
+        if (!cacheUserInfo) {
+            startLogin();
+        } else {
+            const parse = JSON.parse(cacheUserInfo);
+            if (parse) {
+                UserStore.setUserInfo(parse);
+                startHome();
+            } else {
+                startLogin();
+            }
         }
     }
 
