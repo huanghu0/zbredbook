@@ -17,6 +17,7 @@ import Welcome from './src/modules/welcome/Welcome';
 import Login from './src/modules/login/Login';
 import MainTab from './src/modules/mainTab/mainTab';
 import ArticleDetail from './src/modules/articleDetail/ArticleDetail';
+import SearchGoods from './src/modules/searchGoods/SearchGoods';
 
 const Stack = createStackNavigator()
 
@@ -67,7 +68,15 @@ function App(): JSX.Element {
                   headerShown: false,
                   ...TransitionPresets.SlideFromRightIOS
               }}
-          />                
+          />    
+          <Stack.Screen
+              name='SearchGoods'
+              component={SearchGoods}
+              options={{
+                  headerShown: false,
+                  presentation: 'transparentModal',
+              }}
+          />                      
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
