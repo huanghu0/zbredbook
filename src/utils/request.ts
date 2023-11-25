@@ -3,7 +3,7 @@ import Apis from '../api/Apis';
 
 
 const instance = axios.create({
-    baseURL:'http://192.168.1.11:7001',
+    baseURL:'http://192.168.1.3:7001',
     timeout:10 * 1000,
 });
 
